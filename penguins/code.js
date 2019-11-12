@@ -1,49 +1,144 @@
 var penguinPromise = d3.json("classData.json");
 
 penguinPromise.then (
-function(data)
+function(penguins)
     {
-        console.log("works", data)
-        //setup(data);
-        days.forEach(function(day,index) {
-        data.map(function(data) 
-                 {return data.quizes[index].grade}) 
-            
-        d3.select("body")
-            .append("button")
-            .text("Day" + d)
-            .on("click", function() {
-            setup(points) 
-        })
+        
+        console.log("works", penguins)
+        var getpoints = points(penguins, 1)
+        console.log(getpoints)
+        setup(getpoints)
+        createDays(penguins)
+        createNext(penguins)
+        createPrevious(penguins)
+        console.log(createDays)
+    }),
 
-    },
+
+        /*days.forEach(function(day,index) 
+        {
+        console.log(classData.map(function(studentinfo) 
+         {return studentinfo.quizes[index].grade})
+                   )})
+                     
+        d3.select(".penguinRow")
+            .append("button")
+            .text("Day" + days)
+            .on("click", function() {
+            d3.selectAll("svg").remove()
+            setup(points);
+        }),*/
+
+
+
 function(error) 
 {
     console.log("broke", err)
+};
+
+var createDays = function(penguins) {
+    d3.select("#daytable")
+    .selectAll("button")
+    .data(penguins[0].quizes)
+    .enter()
+    .append("button")
+    .text(function (d) {
+        return ("Day " + d.day)
+    })
+    
+    .on("click", function(quiz, index) {
+      d3.selectAll("svg *").remove()
+        
+        var getpoints = points(penguins, index)
+        console.log(getpoints)
+        setup(getpoints)
+        
+    })
 }
-);
-
-var days = [1,2,3,4,5,6,7,8,9,10,11,12,13,14, 16,17,18,19,20,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36,37,38,39,40]
 
 
+var createNext = function(penguins) {
+    d3.select("#next")
+    .append("button")
+    .data(penguins[0].quizes)
+    .text("Next")
+    .on("click", function(quiz,index) {
+        
+        d3.selectAll("svg *").remove()
+        
+        if(index < 39)
+        {var getpoints = points(penguins, index+2)
+        console.log(getpoints)
+        setup(getpoints)
+         
+         
+         
+         
+    }})
+    
+    var getpoints = points(penguins, 0)
+        console.log(getpoints)
+        setup(getpoints)
+        
+}
 
+var createPrevious = function(penguins) {
+    d3.select("#previous")
+    .append("button")
+    .data(penguins[0].quizes)
+    .text("Previous")
+    .on("click", function(quiz,index) {
+        
+        d3.selectAll("svg *").remove()
+        
+          if(index < 39)
+        {var getpoints = points(penguins, index+2)
+        console.log(getpoints)
+        setup(getpoints)
+         
+         
+         
+         
+    }})
+    
+    var getpoints = points(penguins, 0)
+        console.log(getpoints)
+        setup(getpoints)
+        
+}
+    
+    
+
+            
 var setBanner= function()
 {
     d3.select("h1").text("GradesbyDay")
 }
 
-var points = data.map(function(days,index)
+  
+
+var points = function(penguins, day)
 {
-    return {
+    return penguins.map(function(d,i)
+
+{
+        return {
         x:i,
-        y:data.quizes[index].grades 
-    }})
+        y:d.quizes[day].grade
+        }
+})
+}
+
     
 console.log("points", points)
 
 var screen = {width:800, height:800}
 
 var drawGraph = function(points, xscale, yscale) {
+    d3.select("svg")
+     .attr("width", screen.width)
+    .attr("height", screen.height)
+    
     d3.select("svg")
     .selectAll("circle")
     .data(points)
@@ -54,10 +149,8 @@ var drawGraph = function(points, xscale, yscale) {
     return xscale(point.x);
     })
     .attr("cy", function(point) {
-        console.log(yscale(point.y));
         return yscale(point.y)
     })}
-
 
 
 var setup = function(points) {
@@ -67,8 +160,7 @@ var setup = function(points) {
     
 var xscale = d3.scaleLinear()
 
-xscale.domain([0,d3.max(points, function(point) {return point.x
-})])
+xscale.domain([0,d3.max(points, function(point) {return point.x})])
                
 xscale.range([100,screen.width-50])
 
@@ -79,13 +171,6 @@ yscale.domain
     d3.max(points,function(points) {return points.y})])
     yscale.range([100, screen.height-600])
     
-    
     drawGraph(points, xscale, yscale)
 }
-
-
-setup(points);
-
-
-
 
