@@ -1,1 +1,39 @@
+body {
+background-image: linear-gradient(#5c8c6a 20%, #d0cc75);
+}
 
+h2 {
+    text-align:center;
+    font-size: 30px;
+     color:#f2c459;
+     
+}
+
+button {
+    margin-left:10px;
+    margin-bottom: 15px;
+    font-size: 20px;
+    
+}
+#daytable
+{
+    margin-left:auto;
+    margin-right:auto;
+    display: inline-block;
+}
+
+h1 {
+    font-size:50px;
+    text-align: center;
+    color:#8d2516;
+    background-color:#f2c459
+}
+
+svg {
+    margin-left:auto;
+    margin-right:auto;
+}
+
+button:hover {
+    background-color:#f2c459;
+}
